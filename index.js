@@ -8,8 +8,8 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const { fail } = require('assert');
 
-var col_num = 10,
-    row_num = 10;
+var col_num = 2,
+    row_num = 2;
 var colors = ['red', 'green', 'blue', 'orange', 'yellow', 'cyan', 'brown', 'purple']
 
 function shuffle(array) {
@@ -60,6 +60,7 @@ class Room{
         this.players = new Array();
 
         this.card_num = row_num * col_num;
+        this.hidden_card_num = row_num * col_num;
         this.cards = genCards();
         this.key = Math.floor(Math.random()*10000000);
         this.c
@@ -177,7 +178,8 @@ io.on('connection', (socket) => {
         }
 
         room.cards[row][col].flipped = true;
-        io.to('game:0').emit('flip', row, col, room.cards[row][col].id)
+        room.hidden_card_num = room.hidden_card_num - 1;
+        io.to('game:0').emit('flip', row, col, room.cards[row][col].id);
 
         if(!player.selected){
             player.selected = true;
@@ -199,28 +201,29 @@ io.on('connection', (socket) => {
                     room.cards[row][col].flipped = false;
                     room.cards[pre_row][pre_col].flipped = false;
                     io.to("game:0").emit('fail pair', row, col, pre_row, pre_col);
+                    room.hidden_card_num = room.hidden_card_num + 2;
                 }
                 player.selected = false;
                 player.timeoutID = setTimeout(() => {
                     player.locked = false;
                 },500);
             }
-            if(room.card_num == 0){
-                let max_score = 0;
-                let winners = new Array();
-                for(let i = 0; i < room.players.length; i++){
-                    if(room.players[i].score > max_score){
-                        winners.length = 0;
-                        winners.push(room.players[i].name);
-                        max_score = room.players[i].score;
-                    }
-                    else if(room.players[i].score == max_score){
-                        winners.push(room.players[i].name);
-                    }
+        }
+        if(room.hidden_card_num == 0){
+            let max_score = 0;
+            let winners = new Array();
+            for(let i = 0; i < room.players.length; i++){
+                if(room.players[i].score > max_score){
+                    winners.length = 0;
+                    winners.push(room.players[i].name);
+                    max_score = room.players[i].score;
                 }
-                io.to("game:0").emit('end game', winners);
-                room = new Room(0);
+                else if(room.players[i].score == max_score){
+                    winners.push(room.players[i].name);
+                }
             }
+            io.to("game:0").emit('end game', winners);
+            room = new Room(0);
         }
 
     });

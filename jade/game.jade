@@ -11,9 +11,9 @@ html
         #info_panel
         #game_panel
             table.card_table
-                -for(i = 0; i < 10; i++){
+                -for(i = 0; i < 2; i++){
                     tr
-                        -for(let j = 0; j < 10; j++){
+                        -for(let j = 0; j < 2; j++){
                             td
                                 .flip_container(id='card_#{i}_#{j}')
                                     .flipper

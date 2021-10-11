@@ -6,11 +6,11 @@ html
     script(type='text/javascript' src='public/js/join.js')
   body
     #join_frame
-      form#join_form(method='post' action='/join')
+      form#join_form(method='post' action='/join' onsubmit='join(true);')
         label.label_input 暱稱
         input#user_name.text_field(type='text' name='user_name')
         #join_control
-          input#btn_join(type='button' value='加入' onclick='join();')
+          input#btn_join(type='button' value='加入' onclick='join(false);')
     - if(fail)
         script.
             alert("#{alert_msg}");
