@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>快手翻翻牌</title>
+    <link href="public/css/join.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="public/js/join.js"></script>
+  </head>
+  <body>
+    <div id="join_frame">
+      <form id="join_form" method="post" action="/game.html">
+        <label class="label_input">暱稱</label>
+        <input type="text" id="user_name" name="user_name" class="text_field"/>
+        <div id="join_control">
+          <input type="button" id="btn_join" value="加入" onclick="join();"/>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

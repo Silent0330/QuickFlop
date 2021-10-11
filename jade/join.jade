@@ -1,0 +1,16 @@
+doctype html
+html
+  head
+    title 快手翻翻牌
+    link(href='public/css/join.css' rel='stylesheet' type='text/css')
+    script(type='text/javascript' src='public/js/join.js')
+  body
+    #join_frame
+      form#join_form(method='post' action='/join')
+        label.label_input 暱稱
+        input#user_name.text_field(type='text' name='user_name')
+        #join_control
+          input#btn_join(type='button' value='加入' onclick='join();')
+    - if(fail)
+        script.
+            alert("#{alert_msg}");

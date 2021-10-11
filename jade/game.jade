@@ -1,0 +1,26 @@
+doctype html
+-let i;
+html
+    head
+        title 快手翻翻牌
+        link(href='public/css/game.css' rel='stylesheet' type='text/css')
+        -for(i = 0; i < 13; i++){
+            link(href='public/img/card_'+i+'.jpg' rel='preload' as='image')
+        -}
+    body
+        #info_panel
+        #game_panel
+            table.card_table
+                -for(i = 0; i < 10; i++){
+                    tr
+                        -for(let j = 0; j < 10; j++){
+                            td
+                                .flip_container(id='card_#{i}_#{j}')
+                                    .flipper
+                                        .front
+                                            img.card_img(src='public/img/card_back.jpg')
+                                        .back
+                        -}
+                -}
+        script(src='/socket.io/socket.io.js')
+        script(src='public/js/game.js')
